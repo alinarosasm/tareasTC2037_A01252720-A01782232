@@ -108,33 +108,32 @@ void compararTextos(string archT1, string archT2)
         contenidoArchivoT2 += lineaT2;
     }
 
-    int maxLongitud = 0;
-    int posicionInicio = -1;
-    int posicionFinal = -1;
+    int n = contenidoArchivoT1.length();
+    int m = contenidoArchivoT2.length();
 
-    for (int i = 0; i < contenidoArchivoT1.length(); i++)
+    vector<vector<int> > LCS(n + 1, vector<int>(m + 1, 0)); // Matriz para la programación dinámica
+    int maxLongitud = 0;                                   
+    int posicionInicio = -1;                              
+
+    for (int i = 1; i <= n; i++)
     {
-        for (int j = 0; j < contenidoArchivoT2.length(); j++)
+        for (int j = 1; j <= m; j++)
         {
-            int longitud = 0;
-            while (i + longitud < contenidoArchivoT1.length() &&
-                   j + longitud < contenidoArchivoT2.length() &&
-                   contenidoArchivoT1[i + longitud] == contenidoArchivoT2[j + longitud])
+            if (contenidoArchivoT1[i - 1] == contenidoArchivoT2[j - 1])
             {
-                longitud++;
-            }
-
-            if (longitud > maxLongitud)
-            {
-                maxLongitud = longitud;
-                posicionInicio = i;
-                posicionFinal = i + longitud - 1;
+                LCS[i][j] = LCS[i - 1][j - 1] + 1;
+                if (LCS[i][j] > maxLongitud)
+                {
+                    maxLongitud = LCS[i][j];
+                    posicionInicio = i - maxLongitud;
+                }
             }
         }
     }
 
     if (maxLongitud > 0)
     {
+        int posicionFinal = posicionInicio + maxLongitud - 1;
         cout << posicionInicio + 1 << " " << posicionFinal + 1 << endl;
     }
     else
